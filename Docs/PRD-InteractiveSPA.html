@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SanctissiMissa: Interactive PRD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Serene Gold -->
+    <!-- Application Structure Plan: A single-page application featuring a persistent sidebar for primary navigation between key PRD sections: Overview, Features, Architecture, and Roadmap. This structure logically segments the dense document, allowing users to focus on one area at a time while always maintaining context. The main content area will use interactive components like cards, accordions, and a clickable chart-based timeline to make the information engaging and easily digestible, transforming passive reading into active exploration. This design prioritizes usability and clarity, making the complex project plan accessible to diverse stakeholders. -->
+    <!-- Visualization & Content Choices: 
+        - Overview: A grid of cards to present the high-level vision, problem, and goals, offering a quick summary.
+        - Features: An interactive diagram built with HTML/CSS to visualize the main feature categories (Core Content, Voice Journal, etc.). Clicking a node reveals detailed information, preventing cognitive overload.
+        - Architecture: A tabbed interface to separate Tech Stack, UX/Design, and a visual System Architecture diagram (built with HTML divs), making technical information digestible.
+        - Roadmap: An interactive horizontal bar chart (Chart.js) representing the four implementation phases. Clicking a phase dynamically displays its specific tasks, providing a clear view of the project's progression.
+        - All choices are made to enhance understanding and engagement without using SVG or Mermaid JS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F2; /* Warm off-white */
+            color: #3D405B; /* Muted slate blue */
+        }
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-link.active {
+            background-color: #E0E0E0;
+            border-left-color: #B8860B; /* Dark Gold Accent */
+            color: #3D405B;
+            font-weight: 600;
+        }
+        .sidebar-link:hover {
+            background-color: #EAEAEA;
+            border-left-color: #D4AF37; /* Lighter Gold Accent */
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+        .main-content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .main-content-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .tab-button {
+            transition: all 0.2s ease-in-out;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-button.active {
+            border-bottom-color: #B8860B;
+            color: #B8860B;
+        }
+        .feature-node {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid #D1D5DB;
+        }
+        .feature-node.active, .feature-node:hover {
+            border-color: #B8860B;
+            background-color: #FDFBF5;
+            transform: scale(1.05);
+        }
+        .feature-line {
+            background-color: #D1D5DB;
+            position: absolute;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="flex h-screen bg-[#F8F7F2]">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-64 bg-white shadow-md flex-shrink-0">
+            <div class="p-6">
+                <h1 class="text-xl font-bold text-[#3D405B]">SanctissiMissa</h1>
+                <p class="text-sm text-gray-500">Interactive PRD</p>
+            </div>
+            <nav class="mt-4">
+                <a href="#" class="sidebar-link block py-3 px-6 text-gray-700" data-section="overview">
+                    <span class="mr-3">➔</span> Overview
+                </a>
+                <a href="#" class="sidebar-link block py-3 px-6 text-gray-700" data-section="features">
+                    <span class="mr-3">➔</span> Features
+                </a>
+                <a href="#" class="sidebar-link block py-3 px-6 text-gray-700" data-section="architecture">
+                    <span class="mr-3">➔</span> Architecture
+                </a>
+                <a href="#" class="sidebar-link block py-3 px-6 text-gray-700" data-section="roadmap">
+                    <span class="mr-3">➔</span> Roadmap
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-6 md:p-10">
+            <!-- Overview Section -->
+            <section id="overview" class="main-content-section">
+                <h2 class="text-3xl font-bold text-[#3D405B] mb-2">Project Overview</h2>
+                <p class="mb-8 text-gray-600">A high-level summary of the project's vision, goals, and purpose, setting the stage for this liturgical digital companion.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card p-6">
+                        <h3 class="font-bold text-lg mb-2 text-[#B8860B]">Project Vision</h3>
+                        <p class="text-gray-600 text-sm">To be the definitive digital platform for the 1962 Extraordinary Form, bridging sacred tradition with modern technology to foster spiritual growth.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="font-bold text-lg mb-2 text-[#B8860B]">Problem Statement</h3>
+                        <p class="text-gray-600 text-sm">Existing digital resources for the Tridentine Liturgy are often fragmented, costly, or lack modern features. SanctissiMissa provides a single, elegant, and comprehensive solution.</p>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="font-bold text-lg mb-2 text-[#B8860B]">Target Audience</h3>
+                        <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
+                            <li>Laity interested in the Extraordinary Form</li>
+                            <li>Priests, seminarians, and religious</li>
+                            <li>Scholars and students of liturgy</li>
+                        </ul>
+                    </div>
+                    <div class="card p-6 lg:col-span-3">
+                        <h3 class="font-bold text-lg mb-2 text-[#B8860B]">Goals & Success Metrics</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                            <div>
+                                <p class="font-semibold">Comprehensiveness</p>
+                                <p class="text-sm text-gray-500">Full Missal & Breviary</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Accessibility</p>
+                                <p class="text-sm text-gray-500">PWA for all devices</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Innovation</p>
+                                <p class="text-sm text-gray-500">Voice Journal & Guides</p>
+                            </div>
+                            <div>
+                                <p class="font-semibold">Usability</p>
+                                <p class="text-sm text-gray-500">Intuitive & Reverent UI</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section id="features" class="main-content-section">
+                <h2 class="text-3xl font-bold text-[#3D405B] mb-2">Application Features</h2>
+                <p class="mb-8 text-gray-600">Explore the core functional requirements that will define the user experience. Click on a feature to see its details.</p>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/2 relative h-96 flex items-center justify-center">
+                        <div class="w-48 h-48 bg-white rounded-full flex items-center justify-center text-center font-bold text-[#B8860B] shadow-lg p-4">SanctissiMissa App Core</div>
+                        <!-- Lines -->
+                        <div class="feature-line h-px w-20" style="top: 50%; left: 10%;"></div>
+                        <div class="feature-line w-px h-20" style="top: 10%; left: 50%;"></div>
+                        <div class="feature-line h-px w-20" style="top: 50%; right: 10%;"></div>
+                        <div class="feature-line w-px h-20" style="bottom: 10%; left: 50%;"></div>
+                        <!-- Nodes -->
+                        <div class="feature-node absolute p-3 rounded-lg shadow-md bg-white text-center" style="top: 0; left: 50%; transform: translateX(-50%);" data-feature="content">
+                            Core Content & Calendar
+                        </div>
+                        <div class="feature-node absolute p-3 rounded-lg shadow-md bg-white text-center" style="top: 50%; left: 0; transform: translateY(-50%);" data-feature="devotions">
+                            Interactive Devotions
+                        </div>
+                        <div class="feature-node absolute p-3 rounded-lg shadow-md bg-white text-center" style="top: 50%; right: 0; transform: translateY(-50%);" data-feature="journal">
+                            Voice Journal
+                        </div>
+                         <div class="feature-node absolute p-3 rounded-lg shadow-md bg-white text-center" style="bottom: 0; left: 50%; transform: translateX(-50%);" data-feature="reminders">
+                            Hour Reminders
+                        </div>
+                    </div>
+                    <div id="feature-details" class="lg:w-1/2 card p-6">
+                        <!-- Details will be injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture Section -->
+            <section id="architecture" class="main-content-section">
+                <h2 class="text-3xl font-bold text-[#3D405B] mb-2">System Architecture</h2>
+                <p class="mb-8 text-gray-600">A look under the hood at the technical foundation, design principles, and data flow of the application.</p>
+                <div class="card p-6">
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                            <button class="tab-button whitespace-nowrap py-4 px-1 font-medium text-sm" data-tab="tech-stack">Tech Stack</button>
+                            <button class="tab-button whitespace-nowrap py-4 px-1 font-medium text-sm" data-tab="ux-design">UX/Design</button>
+                            <button class="tab-button whitespace-nowrap py-4 px-1 font-medium text-sm" data-tab="system-diagram">System Diagram</button>
+                        </nav>
+                    </div>
+                    <div class="mt-6">
+                        <div id="tech-stack" class="tab-content">
+                            <ul class="space-y-3">
+                                <li class="flex items-start"><span class="font-semibold w-32 shrink-0">Approach:</span> <span class="text-gray-600">Web-First Progressive Web App (PWA)</span></li>
+                                <li class="flex items-start"><span class="font-semibold w-32 shrink-0">Framework:</span> <span class="text-gray-600">React with TypeScript</span></li>
+                                <li class="flex items-start"><span class="font-semibold w-32 shrink-0">State:</span> <span class="text-gray-600">Redux (@reduxjs/toolkit)</span></li>
+                                <li class="flex items-start"><span class="font-semibold w-32 shrink-0">Database:</span> <span class="text-gray-600">IndexedDB for local-first storage</span></li>
+                                <li class="flex items-start"><span class="font-semibold w-32 shrink-0">Offline:</span> <span class="text-gray-600">Robust Service Worker</span></li>
+                            </ul>
+                        </div>
+                        <div id="ux-design" class="tab-content" style="display:none;">
+                           <ul class="space-y-3">
+                                <li class="flex items-start"><span class="font-semibold w-32 shrink-0">Responsiveness:</span> <span class="text-gray-600">Flawlessly adaptive UI for all screen sizes.</span></li>
+                                <li class="flex items-start"><span class="font-semibold w-32 shrink-0">Navigation:</span> <span class="text-gray-600">Bottom tabs on mobile, persistent sidebar on desktop.</span></li>
+                                <li class="flex items-start"><span class="font-semibold w-32 shrink-0">Personalization:</span> <span class="text-gray-600">User-controlled font sizes and themes (Day/Night/Sepia).</span></li>
+                                <li class="flex items-start"><span class="font-semibold w-32 shrink-0">Accessibility:</span> <span class="text-gray-600">Voice commands & Text-to-Speech via Web Speech API.</span></li>
+                            </ul>
+                        </div>
+                        <div id="system-diagram" class="tab-content" style="display:none;">
+                            <div class="space-y-4 text-center">
+                                <div class="p-4 bg-amber-100 border border-amber-300 rounded-lg">
+                                    <p class="font-bold">UI Layer (React Components)</p>
+                                    <p class="text-sm text-gray-600">Screens, Components, Navigation</p>
+                                </div>
+                                <div class="text-2xl">↓</div>
+                                <div class="p-4 bg-blue-100 border border-blue-300 rounded-lg">
+                                    <p class="font-bold">Platform Adapter Layer</p>
+                                    <p class="text-sm text-gray-600">IndexedDB & Web Speech API Wrappers</p>
+                                </div>
+                                <div class="text-2xl">↓</div>
+                                <div class="p-4 bg-green-100 border border-green-300 rounded-lg">
+                                    <p class="font-bold">Platform-Agnostic Core</p>
+                                    <p class="text-sm text-gray-600">Services, Redux Store, Types, Business Logic</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Roadmap Section -->
+            <section id="roadmap" class="main-content-section">
+                <h2 class="text-3xl font-bold text-[#3D405B] mb-2">Implementation Roadmap</h2>
+                <p class="mb-8 text-gray-600">A phased approach to development, from Minimum Viable Product to a polished, feature-rich application. Click a phase on the chart for details.</p>
+                <div class="card p-6">
+                    <div class="chart-container">
+                        <canvas id="roadmapChart"></canvas>
+                    </div>
+                    <div id="roadmap-details" class="mt-8">
+                        <!-- Details will be injected here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            const sections = document.querySelectorAll('.main-content-section');
+            const featureNodes = document.querySelectorAll('.feature-node');
+            const featureDetailsContainer = document.getElementById('feature-details');
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            const featureData = {
+                content: {
+                    title: 'Core Content & Calendar',
+                    points: [
+                        'Complete 1962 Roman Missal & Breviary.',
+                        'Bilingual Latin/English side-by-side view.',
+                        'Advanced calendar engine for automatic date calculation.',
+                        'Handles all precedence rules and commemorations.'
+                    ]
+                },
+                devotions: {
+                    title: 'Interactive Devotions',
+                    points: [
+                        'Guided prayer mode for Rosary, Chaplets, etc.',
+                        'Visual, interactive Rosary beads for tracking prayers.',
+                        'Comprehensive library of traditional litanies and novenas.',
+                        'Optional auto-advance with customizable timing.'
+                    ]
+                },
+                journal: {
+                    title: 'Voice Journal',
+                    points: [
+                        'Record audio reflections anchored to any liturgical text.',
+                        'Initiated by a simple long-press on text.',
+                        'Local-first storage in IndexedDB for privacy.',
+                        'Entries are searchable and organized by date and tags.'
+                    ]
+                },
+                reminders: {
+                    title: 'Liturgical Hour Reminders',
+                    points: [
+                        'Timely, reverent reminders for the 8 canonical hours.',
+                        'Fully customizable: enable/disable, set custom times.',
+                        'Subtle in-app banners and standard system notifications.',
+                        'Calendar-aware: links directly to the correct office.'
+                    ]
+                }
+            };
+            
+            const roadmapData = {
+                'Phase 1': {
+                    title: 'MVP - Core Missal & PWA Foundation',
+                    tasks: [
+                        'Setup project (React, Vite, Redux)',
+                        'Implement IndexedDB Storage Adapter',
+                        'Build core Calendar Service',
+                        'Create UI for Mass texts',
+                        'Configure Service Worker for offline use'
+                    ]
+                },
+                'Phase 2': {
+                    title: 'Divine Office & Devotions',
+                    tasks: [
+                        'Integrate Breviary texts',
+                        'Build UI for the 8 canonical hours',
+                        'Implement Guided Prayer Mode',
+                        'Create interactive Rosary beads'
+                    ]
+                },
+                'Phase 3': {
+                    title: 'The Voice Journal & Reminders',
+                    tasks: [
+                        'Implement Voice Adapter for audio recording',
+                        'Develop the full Voice Journal UX/UI flow',
+                        'Implement Liturgical Hours Reminder system',
+                        'Integrate notifications'
+                    ]
+                },
+                'Phase 4': {
+                    title: 'Polish & Advanced Accessibility',
+                    tasks: [
+                        'Implement voice command navigation',
+                        'Add Text-to-Speech functionality',
+                        'Add advanced personalization (fonts, themes)',
+                        'Conduct thorough performance optimization'
+                    ]
+                }
+            };
+            
+            function showSection(sectionId) {
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(sectionId).classList.add('active');
+
+                sidebarLinks.forEach(link => {
+                    link.classList.toggle('active', link.dataset.section === sectionId);
+                });
+            }
+
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showSection(link.dataset.section);
+                });
+            });
+            
+            function updateFeatureDetails(featureId) {
+                const data = featureData[featureId];
+                if (!data) return;
+
+                let content = `<h3 class="font-bold text-lg mb-4 text-[#B8860B]">${data.title}</h3><ul class="list-disc list-inside space-y-2 text-gray-600 text-sm">`;
+                data.points.forEach(point => {
+                    content += `<li>${point}</li>`;
+                });
+                content += `</ul>`;
+                featureDetailsContainer.innerHTML = content;
+                
+                featureNodes.forEach(node => node.classList.remove('active'));
+                document.querySelector(`.feature-node[data-feature="${featureId}"]`).classList.add('active');
+            }
+
+            featureNodes.forEach(node => {
+                node.addEventListener('click', () => {
+                    updateFeatureDetails(node.dataset.feature);
+                });
+            });
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    tabContents.forEach(content => content.style.display = 'none');
+                    document.getElementById(button.dataset.tab).style.display = 'block';
+                });
+            });
+
+            function updateRoadmapDetails(phaseTitle) {
+                 const data = roadmapData[phaseTitle];
+                 if(!data) return;
+                 const container = document.getElementById('roadmap-details');
+                 let content = `<h3 class="font-bold text-lg mb-4 text-[#B8860B]">${data.title}</h3><ul class="list-disc list-inside space-y-2 text-gray-600 text-sm">`;
+                 data.tasks.forEach(task => {
+                    content += `<li>${task}</li>`;
+                 });
+                 content += `</ul>`;
+                 container.innerHTML = content;
+            }
+
+            const ctx = document.getElementById('roadmapChart').getContext('2d');
+            const roadmapChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4'],
+                    datasets: [{
+                        label: 'Implementation Roadmap',
+                        data: [1, 1, 1, 1],
+                        backgroundColor: [
+                            'rgba(212, 175, 55, 0.6)',
+                            'rgba(184, 134, 11, 0.6)',
+                            'rgba(205, 127, 50, 0.6)',
+                            'rgba(139, 69, 19, 0.6)'
+                        ],
+                        borderColor: [
+                             '#D4AF37',
+                             '#B8860B',
+                             '#CD7F32',
+                             '#8B4513'
+                        ],
+                        borderWidth: 2,
+                        barPercentage: 0.5,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false,
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true,
+                            grid: {
+                                display: false
+                            },
+                             ticks: {
+                                color: '#3D405B',
+                                font: {
+                                    weight: '600'
+                                }
+                            }
+                        }
+                    },
+                    onClick: (event, elements) => {
+                        if (elements.length > 0) {
+                            const elementIndex = elements[0].index;
+                            const phaseTitle = roadmapChart.data.labels[elementIndex];
+                            updateRoadmapDetails(phaseTitle);
+                        }
+                    },
+                    onHover: (event, chartElement) => {
+                        event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+                    }
+                }
+            });
+
+            showSection('overview');
+            updateFeatureDetails('content');
+            updateRoadmapDetails('Phase 1');
+            tabButtons[0].click();
+        });
+    </script>
+</body>
+</html>

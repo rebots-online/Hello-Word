@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SanctissiMissa: Project Infographic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Brilliant Blues -->
+    <!-- Application Structure Plan: A top-down, single-page narrative infographic that guides the user through the SanctissiMissa project. The flow begins with a high-level vision, moves to the target audience and core goals, details the application's features and technical architecture through diagrams, and concludes with the phased implementation roadmap. This linear story format is ideal for transforming a dense document into a clear, compelling, and easily scannable visual summary. -->
+    <!-- Visualization & Content Choices: 
+        - Vision & Goals: A combination of large text callouts and a donut chart (Chart.js) to quantify the project's four main pillars (Comprehensiveness, Accessibility, Modernity, Innovation). Goal: Inform.
+        - Target Audience: Styled cards with Unicode icons (👤,  sacerdote, 🎓) to clearly segment the user base. Goal: Organize.
+        - Core Features: A flowchart created with styled HTML divs and Tailwind CSS to visually map the relationship between the core app and its main feature sets. Goal: Organize/Relationships. NO SVG/Mermaid used.
+        - Tech Architecture: A layered diagram built with HTML/CSS to represent the three-tier system architecture (UI, Adapter, Core). Goal: Organize. NO SVG/Mermaid used.
+        - Roadmap: A horizontal bar chart (Chart.js) to show the four distinct development phases and their sequence. The bar length represents a sequential step, not duration. Goal: Change/Organize.
+        - All choices adhere to the NO SVG/Mermaid constraint. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #665191, #d45087);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-[#003f5c]">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+
+        <!-- Header -->
+        <header class="text-center my-8 md:my-12">
+            <h1 class="text-4xl md:text-5xl font-bold gradient-text">SanctissiMissa</h1>
+            <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">An infographic overview of the definitive digital platform for the Extraordinary Form of the Roman Rite.</p>
+        </header>
+
+        <!-- Vision & Audience Section -->
+        <section class="my-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4 text-[#665191]">Project Vision</h2>
+                    <p class="text-gray-700">To bridge sacred tradition and contemporary technology, creating a tool that is not merely an information repository but a companion for personal spiritual growth, accessible to a global audience.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4 text-[#665191]">Target Audience</h2>
+                    <div class="flex flex-col sm:flex-row justify-around text-center gap-4">
+                        <div>
+                            <span class="text-4xl">👤</span>
+                            <p class="font-semibold mt-2">Laity</p>
+                            <p class="text-sm text-gray-600">Attendees & Learners</p>
+                        </div>
+                        <div>
+                            <span class="text-4xl">⛪</span>
+                            <p class="font-semibold mt-2">Clergy</p>
+                            <p class="text-sm text-gray-600">Priests & Seminarians</p>
+                        </div>
+                        <div>
+                            <span class="text-4xl">🎓</span>
+                            <p class="font-semibold mt-2">Scholars</p>
+                            <p class="text-sm text-gray-600">Students & Researchers</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goals Section -->
+        <section class="my-12 bg-white p-6 md:p-8 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-center mb-2 text-[#d45087]">Four Pillars of Success</h2>
+            <p class="text-center text-gray-600 mb-8">The project is built on four equally important foundational goals.</p>
+            <div class="chart-container" style="height: 300px; max-height: 350px;">
+                <canvas id="goalsChart"></canvas>
+            </div>
+            <p class="text-center text-gray-600 mt-4">Each goal represents a core commitment to delivering a high-quality, comprehensive, and innovative liturgical application.</p>
+        </section>
+
+        <!-- Core Features Section -->
+        <section class="my-12">
+            <h2 class="text-3xl font-bold text-center mb-2 text-[#d45087]">Core Features Architecture</h2>
+            <p class="text-center text-gray-600 mb-8">The application is structured around a powerful core with distinct, innovative feature sets.</p>
+            <div class="relative flex items-center justify-center h-96 md:h-[450px] bg-white rounded-lg shadow-lg p-4">
+                <div class="absolute w-36 h-36 md:w-48 md:h-48 bg-[#003f5c] text-white rounded-full flex items-center justify-center text-center font-bold shadow-2xl p-4 z-10">PWA Core Services & Data</div>
+                
+                <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-[#665191] text-white py-2 px-4 rounded-full shadow-md text-sm md:text-base">Full Liturgical Texts</div>
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#a05195] text-white py-2 px-4 rounded-full shadow-md text-sm md:text-base">Voice Journal</div>
+                <div class="absolute left-4 top-1/2 -translate-y-1/2 bg-[#d45087] text-white py-2 px-4 rounded-full shadow-md text-sm md:text-base">Interactive Devotions</div>
+                <div class="absolute right-4 top-1/2 -translate-y-1/2 bg-[#f95d6a] text-white py-2 px-4 rounded-full shadow-md text-sm md:text-base">Hour Reminders</div>
+
+                <div class="absolute h-1/4 w-px bg-gray-300 top-1/4 left-1/2 -translate-x-1/2"></div>
+                <div class="absolute h-1/4 w-px bg-gray-300 bottom-1/4 left-1/2 -translate-x-1/2"></div>
+                <div class="absolute w-1/4 h-px bg-gray-300 left-1/4 top-1/2 -translate-y-1/2"></div>
+                <div class="absolute w-1/4 h-px bg-gray-300 right-1/4 top-1/2 -translate-y-1/2"></div>
+            </div>
+            <p class="text-center text-gray-600 mt-4">This modular design ensures that each feature, from the complete Missal to the Voice Journal, is seamlessly integrated with the core calendar and data engine.</p>
+        </section>
+        
+        <!-- Tech Stack and Architecture -->
+        <section class="my-12">
+             <h2 class="text-3xl font-bold text-center mb-8 text-[#d45087]">Technology & Architecture</h2>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-[#665191]">Tech Stack</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center"><span class="font-bold text-blue-500 text-xl mr-3">➔</span><strong>Framework:</strong> React with TypeScript</li>
+                        <li class="flex items-center"><span class="font-bold text-blue-500 text-xl mr-3">➔</span><strong>State:</strong> Redux Toolkit</li>
+                        <li class="flex items-center"><span class="font-bold text-blue-500 text-xl mr-3">➔</span><strong>Database:</strong> IndexedDB (Offline First)</li>
+                        <li class="flex items-center"><span class="font-bold text-blue-500 text-xl mr-3">➔</span><strong>Approach:</strong> Progressive Web App (PWA)</li>
+                    </ul>
+                 </div>
+                 <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-[#665191]">System Architecture</h3>
+                    <div class="space-y-2">
+                        <div class="bg-blue-100 border-l-4 border-blue-500 p-3 rounded">
+                            <p class="font-bold">UI Layer (React)</p>
+                            <p class="text-sm text-gray-600">Screens & Components</p>
+                        </div>
+                        <p class="text-center font-bold text-gray-400 text-xl">↓</p>
+                        <div class="bg-purple-100 border-l-4 border-purple-500 p-3 rounded">
+                            <p class="font-bold">Platform Adapter Layer</p>
+                            <p class="text-sm text-gray-600">IndexedDB & Web Speech API</p>
+                        </div>
+                         <p class="text-center font-bold text-gray-400 text-xl">↓</p>
+                        <div class="bg-green-100 border-l-4 border-green-500 p-3 rounded">
+                            <p class="font-bold">Platform-Agnostic Core</p>
+                            <p class="text-sm text-gray-600">Business Logic & Services</p>
+                        </div>
+                    </div>
+                 </div>
+             </div>
+        </section>
+
+
+        <!-- Roadmap Section -->
+        <section class="my-12 bg-white p-6 md:p-8 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-center mb-2 text-[#d45087]">Phased Development Roadmap</h2>
+            <p class="text-center text-gray-600 mb-8">A four-phase plan ensures a structured rollout from Minimum Viable Product to a polished, feature-complete application.</p>
+            <div class="chart-container" style="height: 400px; max-height: 450px;">
+                <canvas id="roadmapChart"></canvas>
+            </div>
+            <p class="text-center text-gray-600 mt-4">This approach prioritizes delivering core value early while building towards the full project vision.</p>
+        </section>
+
+    </div>
+
+    <script>
+        const wrapLabel = (str, max_width) => {
+            if (str.length <= max_width) return str;
+            const words = str.split(' ');
+            let current_line = '';
+            const lines = [];
+            words.forEach(word => {
+                if ((current_line + word).length > max_width) {
+                    lines.push(current_line.trim());
+                    current_line = '';
+                }
+                current_line += word + ' ';
+            });
+            lines.push(current_line.trim());
+            return lines;
+        };
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(' ');
+            } else {
+              return label;
+            }
+        };
+
+        const defaultTooltipOptions = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: tooltipTitleCallback
+                    }
+                }
+            }
+        };
+
+        const goalsChartCtx = document.getElementById('goalsChart').getContext('2d');
+        new Chart(goalsChartCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Comprehensiveness', 'Accessibility', 'Modernity & PWA', 'Innovation'],
+                datasets: [{
+                    label: 'Project Goals',
+                    data: [25, 25, 25, 25],
+                    backgroundColor: ['#2f4b7c', '#665191', '#a05195', '#d45087'],
+                    borderColor: '#ffffff',
+                    borderWidth: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: defaultTooltipOptions.plugins.tooltip
+                }
+            }
+        });
+
+        const roadmapChartCtx = document.getElementById('roadmapChart').getContext('2d');
+        new Chart(roadmapChartCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    wrapLabel('Phase 1: MVP & Core Missal Foundation', 16),
+                    wrapLabel('Phase 2: Divine Office & Devotions', 16),
+                    wrapLabel('Phase 3: The Voice Journal & Reminders', 16),
+                    wrapLabel('Phase 4: Polish & Advanced Accessibility', 16)
+                ],
+                datasets: [{
+                    label: 'Development Phase',
+                    data: [1, 2, 3, 4],
+                    backgroundColor: ['#2f4b7c', '#665191', '#a05195', '#d45087'],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        ...defaultTooltipOptions.plugins.tooltip,
+                        callbacks: {
+                            ...defaultTooltipOptions.plugins.tooltip.callbacks,
+                            label: (context) => `Represents phase ${context.raw} of 4 in the project timeline.`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { display: false }
+                    },
+                    y: {
+                         grid: { display: false },
+                         ticks: {
+                             font: {
+                                size: 14,
+                                weight: '600'
+                             },
+                             color: '#003f5c'
+                         }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
