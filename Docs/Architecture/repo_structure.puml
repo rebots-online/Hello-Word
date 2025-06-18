@@ -1,0 +1,9 @@
+@startuml
+folder "Hello-Word" {
+  folder "Docs" {
+    folder "Architecture" {}
+    folder "checklists" {}
+  }
+  file ".gitignore"
+}
+@enduml
