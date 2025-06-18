@@ -1,0 +1,10 @@
+@startuml
+class OldSchema
+class Optimizer
+class NewSchema
+class Application
+Optimizer --> OldSchema : compare
+Optimizer --> NewSchema
+OldSchema ..> Application
+NewSchema --> Application
+@enduml

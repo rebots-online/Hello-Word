@@ -1,0 +1,18 @@
+@startuml
+actor User
+component "Web Server" as WS
+package "CGI" {
+  component "horas" as Horas
+  component "missa" as Missa
+}
+component "Data Files" as Data
+component "Liturgical Logic" as Logic
+User --> WS
+WS --> Horas
+WS --> Missa
+Horas --> Data
+Missa --> Data
+Data --> Logic
+Horas --> User
+Missa --> User
+@enduml

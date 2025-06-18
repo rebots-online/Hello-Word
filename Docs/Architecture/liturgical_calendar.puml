@@ -1,0 +1,8 @@
+@startuml
+[*] --> DetermineDate
+DetermineDate --> FixedFeasts
+DetermineDate --> MovableFeasts
+FixedFeasts --> PrecedenceRules
+MovableFeasts --> PrecedenceRules
+PrecedenceRules --> AssembleOffice
+@enduml

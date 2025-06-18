@@ -1,0 +1,7 @@
+flowchart TD
+  User -- requests --> web_server
+  web_server --> CGI_scripts
+  CGI_scripts --> DataFiles
+  DataFiles --> LiturgicalLogic
+  CGI_scripts --> HTML_Output
+  HTML_Output --> User

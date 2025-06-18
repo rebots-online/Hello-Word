@@ -1,0 +1,6 @@
+flowchart LR
+  subgraph FlatFiles
+    A[.txt data]--parsing-->B(DatabaseLoader)
+  end
+  B-->C[SQLite Tables]
+  C-->D[Application]
