@@ -1,0 +1,7 @@
+stateDiagram-v2
+  [*] --> DetermineDate
+  DetermineDate --> FixedFeasts
+  DetermineDate --> MovableFeasts
+  FixedFeasts --> PrecedenceRules
+  MovableFeasts --> PrecedenceRules
+  PrecedenceRules --> AssembleOffice

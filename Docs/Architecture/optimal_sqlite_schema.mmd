@@ -1,0 +1,6 @@
+flowchart LR
+  OldTables[Current SQLite Schema]
+  Optimizer -->|compare| OldTables
+  Optimizer --> NewSchema[Proposed Schema]
+  OldTables -.-> Application
+  NewSchema --> Application

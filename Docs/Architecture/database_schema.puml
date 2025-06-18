@@ -1,0 +1,11 @@
+@startuml
+package "Flat Files" {
+  class TextFiles
+}
+class DatabaseLoader
+DatabaseLoader --> TextFiles
+class SQLiteTables
+DatabaseLoader --> SQLiteTables
+class Application
+SQLiteTables --> Application
+@enduml
