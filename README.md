@@ -1,7 +1,11 @@
 # SanctissiMissa Project Overview
+(Codenamed "Hello, Word")
+Copyright (C)2025 Robin L. M. Cheung, MBA. All rights reserved. 
 
 ## Project Vision
 SanctissiMissa aims to be a full-featured, completely free platform for accessing traditional Latin liturgical texts and prayers, with a focus on the Extraordinary Form. The platform will provide comprehensive access to the Mass, Divine Office, and other Latin prayers and devotions, while incorporating modern features like voice journaling and responsive design.
+
+Having spent a significant portion of my deferred youth serving the Extraordinary Form traditional Daily Latin Catholic Mass in the Roman Rite, I am aware that there is a well-known project that comprehensively performs much the same functionality; however, it is a perl-based implementation, literally from the previous millenium, and I thought it time to bring the millenia-old traditional Latin Mass and Breviary into present-day app framework, powered no longer buy a database comprising flat-text files, but a real database engine backing it.
 
 ## Core Features
 
